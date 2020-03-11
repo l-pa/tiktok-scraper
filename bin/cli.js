@@ -10,21 +10,13 @@ const CONST = require('../lib/constant');
 const startScraper = async argv => {
     try {
         argv.type = argv._[0];
-        argv.cli = true;
+        argv.cli = false;
         argv.input = argv.id;
         argv.user_data = argv.userdata;
-        argv.store_history = argv.store;
-        const scraper = await TikTokScraper(argv).scrape();
 
-        if (scraper.zip) {
-            console.log(`ZIP path: ${scraper.zip}`);
-        }
-        if (scraper.json) {
-            console.log(`JSON path: ${scraper.json}`);
-        }
-        if (scraper.csv) {
-            console.log(`CSV path: ${scraper.csv}`);
-        }
+        const scraper = await TikTokScraper(argv).scrape();
+        console.log(scraper);
+        return scraper;
     } catch (error) {
         console.log(error);
     }
@@ -93,6 +85,11 @@ require('yargs')
             boolean: true,
             default: false,
             describe: 'Scraper will save the progress in the OS TMP folder and in the future usage will only download new videos avoiding duplicates',
+        },
+        signature: {
+            alias: ['i'],
+            default: '',
+            describe: 'Signature',
         },
     })
     .check(argv => {
